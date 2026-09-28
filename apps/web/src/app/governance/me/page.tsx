@@ -12,6 +12,10 @@ import { formatUtcTimestamp } from "@/lib/time";
 import { useGovernanceConfig, useProposalPage } from "@/queries/coreQueries";
 import { useWallet } from "@/wallet/WalletProvider";
 import { WalletRequirementNotice } from "@/wallet/ConnectWallet";
+import { inspectRuntimeConfig } from "@/config/env";
+import {
+  ConfigurationIncompleteNotice,
+} from "@/components/shared/Notices";
 import { PageHeader, Panel } from "@/components/shared/Primitives";
 import { StateBadge } from "@/components/shared/StateBadge";
 import type { Proposal } from "@/domain/types";
@@ -45,6 +49,26 @@ export default function MyGovernancePage() {
 
   const config = useGovernanceConfig();
   const proposals = useProposalPage(page, PAGE_SIZE);
+
+  /**
+   * A deployment whose contract addresses are not configured is reported as
+   * exactly that, with the missing variables named, rather than as a read
+   * failure or a wallet problem.
+   */
+  const inspected = inspectRuntimeConfig();
+  if (!inspected.ok) {
+    return (
+      <main className="mx-auto max-w-shell px-6 py-16">
+        <PageHeader
+          eyebrow="My governance"
+          title="What requires your attention"
+        />
+        <div className="mt-10">
+          <ConfigurationIncompleteNotice issues={inspected.error.issues} />
+        </div>
+      </main>
+    );
+  }
 
   if (wallet.address === null) {
     return (

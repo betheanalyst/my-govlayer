@@ -15,6 +15,7 @@ import type {
   ProposalRevision,
 } from "@/domain/types";
 import {
+  asReadFailure,
   getDefaultConnection,
   readContractView,
   submitContractWrite,
@@ -44,24 +45,40 @@ export interface SubmitProposalInput {
 }
 
 export class GovLayerCoreAdapter {
-  private readonly connection: ResolvedConnection;
+  /**
+   * The connection is resolved per operation rather than at construction, so a
+   * missing configuration becomes a failed read instead of a render-time crash
+   * (see `getDefaultConnection`).
+   */
+  private readonly explicitConnection: ResolvedConnection | undefined;
 
-  constructor(connection: ResolvedConnection = getDefaultConnection()) {
-    this.connection = connection;
+  constructor(connection?: ResolvedConnection) {
+    this.explicitConnection = connection;
+  }
+
+  private connection(): ResolvedConnection {
+    return this.explicitConnection ?? getDefaultConnection();
   }
 
   get address(): string {
-    return this.connection.config.coreAddress;
+    return this.connection().config.coreAddress;
   }
 
   private read(functionName: string, args?: readonly CalldataValue[]): Promise<unknown> {
+    let connection: ResolvedConnection;
+    try {
+      connection = this.connection();
+    } catch (error) {
+      return Promise.reject(asReadFailure(error));
+    }
+
     return readContractView(
       {
-        address: this.address,
+        address: connection.config.coreAddress,
         functionName,
         ...(args === undefined ? {} : { args }),
       },
-      this.connection,
+      connection,
     );
   }
 
@@ -70,10 +87,17 @@ export class GovLayerCoreAdapter {
     args: readonly CalldataValue[],
     options: WriteOptions = {},
   ): Promise<WriteOutcome> {
+    let connection: ResolvedConnection;
+    try {
+      connection = this.connection();
+    } catch (error) {
+      return Promise.reject(asReadFailure(error));
+    }
+
     return submitContractWrite(
-      { address: this.address, functionName, args },
+      { address: connection.config.coreAddress, functionName, args },
       options,
-      this.connection,
+      connection,
     );
   }
 

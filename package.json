@@ -4,7 +4,7 @@
   "private": true,
   "description": "GovLayer - constitutional governance protocol on GenLayer. Monorepo root: contracts plus the web application.",
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "npm --prefix apps/web run dev",

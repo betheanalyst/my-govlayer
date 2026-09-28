@@ -6,6 +6,7 @@ import {
 } from "genlayer-js/types";
 import {
   getRuntimeConfig,
+  ConfigurationError,
   type GovLayerRuntimeConfig,
 } from "@/config/env";
 import { resolveNetwork, type NetworkPreset } from "@/config/network";
@@ -127,12 +128,43 @@ export function createWalletConnection(
 
 let defaultConnection: ResolvedConnection | undefined;
 
-/** Read-only connection, created once per process. */
+/**
+ * Read-only connection, created once per process.
+ *
+ * This is only ever called from inside an async operation. It deliberately does
+ * not run from a constructor or a default parameter, because configuration
+ * problems must surface as a failed read rather than as a render-time crash --
+ * the interface has an honest "configuration incomplete" state for exactly this,
+ * and a misconfigured deployment should show it instead of failing to build.
+ */
 export function getDefaultConnection(): ResolvedConnection {
   if (defaultConnection === undefined) {
     defaultConnection = createGovLayerClient();
   }
   return defaultConnection;
+}
+
+/**
+ * Turns a configuration failure into a typed, non-retryable error on the read.
+ *
+ * Preferable to letting the raw `ConfigurationError` escape: the query policy,
+ * the notices and the error registry all understand `AppError`, and a missing
+ * variable is not something a retry can fix.
+ */
+export function asReadFailure(error: unknown): AppError {
+  if (error instanceof ConfigurationError) {
+    return new AppError({
+      kind: "configuration",
+      message:
+        "This deployment's contract configuration is incomplete, so the governance contracts could not be read.",
+      nextStep:
+        "Set the required NEXT_PUBLIC_* variables for this deployment. The interface lists which ones are missing.",
+      raw: extractMessage(error),
+      cause: error,
+    });
+  }
+
+  return classifyError(error);
 }
 
 /** Values the SDK's calldata encoder accepts (maps omitted deliberately). */

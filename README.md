@@ -159,8 +159,32 @@ smoke test. The smoke test is read-only and safe to re-run at any time.
 ## Deployment
 
 The deployable application is `apps/web`. On Vercel, set the project root
-directory to `apps/web` and provide the three `NEXT_PUBLIC_*` variables above
-per environment. Contract addresses are configuration, never code.
+directory to `apps/web`. Contract addresses are configuration, never code.
+
+### Addresses in the repository
+
+`apps/web/.env.production` is committed and targets the current Studionet
+deployment, so a production build always points at a real deployment without
+per-project configuration. This is deliberate, and it is still configuration
+rather than code: no source file contains an address, `src/config/env.ts`
+validates whatever it is given, and migration stays a configuration change.
+
+Precedence, verified against `@next/env`:
+
+```
+real environment variables  >  .env.production.local  >  .env.local
+                            >  .env.production        >  .env
+```
+
+A variable set in the Vercel project, in CI, or in a local `.env.local` therefore
+**overrides** the committed file. To point a deployment somewhere else, set the
+three `NEXT_PUBLIC_*` variables in that environment; nothing in the repository
+can override them. Locally, keep using `.env.local` as `apps/web/.env.example`
+describes, which takes precedence over the committed file.
+
+A missing configuration is not fatal either way: the build succeeds, and every
+surface that needs a deployment says so explicitly, naming the variables that are
+absent, rather than failing to deploy or inventing an address.
 
 ---
 

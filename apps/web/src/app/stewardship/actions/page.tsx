@@ -8,7 +8,8 @@ import { useScannedAdminActions } from "@/queries/stewardshipQueries";
 import { useAdminSnapshot } from "@/queries/adminQueries";
 import { ActionSummaryList } from "@/components/stewardship/ActionSummaryList";
 import { PageHeader, Panel, SectionHeading } from "@/components/shared/Primitives";
-import { UnverifiedNotice } from "@/components/shared/Notices";
+import { UnverifiedNotice, ConfigurationIncompleteNotice } from "@/components/shared/Notices";
+import { inspectRuntimeConfig } from "@/config/env";
 
 /**
  * Every authorized action.
@@ -26,6 +27,19 @@ export default function StewardshipActionsPage() {
   const actions = [...(scan.data?.actions ?? [])].sort((left, right) =>
     compareActionIdsDescending(left.actionId, right.actionId),
   );
+
+  const inspected = inspectRuntimeConfig();
+  if (!inspected.ok) {
+    return (
+      <main className="mx-auto max-w-shell px-6 py-16">
+        <PageHeader eyebrow="Stewardship" title="Authorized actions" />
+        <div className="mt-10">
+          <ConfigurationIncompleteNotice issues={inspected.error.issues} />
+        </div>
+      </main>
+    );
+  }
+
 
   return (
     <main className="mx-auto max-w-shell px-6 py-16">

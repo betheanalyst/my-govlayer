@@ -19,6 +19,7 @@ import {
 import { useScannedAdminActions } from "@/queries/stewardshipQueries";
 import { useWallet } from "@/wallet/WalletProvider";
 import { ConnectWallet } from "@/wallet/ConnectWallet";
+import { inspectRuntimeConfig } from "@/config/env";
 import { ActionSummaryList } from "@/components/stewardship/ActionSummaryList";
 import {
   PageHeader,
@@ -28,7 +29,7 @@ import {
   SectionHeading,
 } from "@/components/shared/Primitives";
 import { StateBadge } from "@/components/shared/StateBadge";
-import { UnverifiedNotice } from "@/components/shared/Notices";
+import { UnverifiedNotice, ConfigurationIncompleteNotice } from "@/components/shared/Notices";
 
 /**
  * Stewardship overview (Experience Blueprint section 10.16).
@@ -47,6 +48,19 @@ export default function StewardshipPage() {
 
   const now = Math.floor(Date.now() / 1000);
   const all = scan.data?.actions ?? [];
+
+  const inspected = inspectRuntimeConfig();
+  if (!inspected.ok) {
+    return (
+      <main className="mx-auto max-w-shell px-6 py-16">
+        <PageHeader eyebrow="Stewardship" title="Protocol stewardship" />
+        <div className="mt-10">
+          <ConfigurationIncompleteNotice issues={inspected.error.issues} />
+        </div>
+      </main>
+    );
+  }
+
   const buckets = bucketStewardshipActions(all, { now });
   const appliedIndex =
     history.data === undefined ? null : indexAppliedActions(history.data.events);

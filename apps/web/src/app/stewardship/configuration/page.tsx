@@ -14,6 +14,8 @@ import {
 } from "@/queries/adminQueries";
 import { useWallet } from "@/wallet/WalletProvider";
 import { ProposeForm, parseIntegerField, parseTextField } from "@/components/stewardship/ProposeForm";
+import { ConfigurationIncompleteNotice } from "@/components/shared/Notices";
+import { inspectRuntimeConfig } from "@/config/env";
 import {
   PageHeader,
   Panel,
@@ -43,6 +45,18 @@ export default function StewardshipConfigurationPage() {
       : membership.data === undefined
         ? "Checking whether the connected address is a steward…"
         : "Only a current steward can propose a configuration change.";
+
+  const inspected = inspectRuntimeConfig();
+  if (!inspected.ok) {
+    return (
+      <main className="mx-auto max-w-shell px-6 py-16">
+        <PageHeader eyebrow="Stewardship" title="Governance configuration" />
+        <div className="mt-10">
+          <ConfigurationIncompleteNotice issues={inspected.error.issues} />
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="mx-auto max-w-shell px-6 py-16">

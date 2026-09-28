@@ -4,7 +4,7 @@
   "private": true,
   "description": "GovLayer web application - a legible front end for the GovLayer constitutional governance protocol.",
   "engines": {
-    "node": ">=22"
+    "node": "22.x"
   },
   "scripts": {
     "dev": "next dev",

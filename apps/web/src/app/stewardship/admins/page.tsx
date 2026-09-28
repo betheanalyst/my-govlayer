@@ -10,6 +10,8 @@ import { useAdminMembership, useAdminSnapshot } from "@/queries/adminQueries";
 import { useScannedAdminActions } from "@/queries/stewardshipQueries";
 import { useWallet } from "@/wallet/WalletProvider";
 import { ProposeForm, parseTextField } from "@/components/stewardship/ProposeForm";
+import { ConfigurationIncompleteNotice } from "@/components/shared/Notices";
+import { inspectRuntimeConfig } from "@/config/env";
 import { PageHeader, SectionHeading } from "@/components/shared/Primitives";
 import { ActionSummaryList } from "@/components/stewardship/ActionSummaryList";
 
@@ -43,6 +45,19 @@ export default function StewardshipAdminsPage() {
       (ADMIN_APPLIED_ACTION_TYPES as readonly string[]).includes(action.actionType),
     )
     .sort((left, right) => compareActionIdsDescending(left.actionId, right.actionId));
+
+  const inspected = inspectRuntimeConfig();
+  if (!inspected.ok) {
+    return (
+      <main className="mx-auto max-w-shell px-6 py-16">
+        <PageHeader eyebrow="Stewardship" title="Stewards" />
+        <div className="mt-10">
+          <ConfigurationIncompleteNotice issues={inspected.error.issues} />
+        </div>
+      </main>
+    );
+  }
+
 
   return (
     <main className="mx-auto max-w-shell px-6 py-16">
