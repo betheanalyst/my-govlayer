@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * GovLayer base layer.
+ *
+ * Restrained, editorial foundation only (Experience Blueprint sections 17-21):
+ * a warm surface, near-black ink, one accent, quiet state colours. No gradient
+ * decoration, no glow, no crypto imagery.
+ */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    @apply bg-surface text-ink font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Editorial display voice for headings; the interface voice stays a
+     highly legible sans. */
+  h1,
+  h2,
+  h3 {
+    @apply font-display;
+    font-variation-settings: "wght" 560;
+    letter-spacing: -0.011em;
+  }
+
+  /* Visible focus for keyboard users (accessibility baseline). */
+  :focus-visible {
+    @apply outline-none ring-2 ring-accent ring-offset-2 ring-offset-surface;
+  }
+
+  /* Status must never be carried by colour alone; every state also gets a
+     label. This only removes colour when the user explicitly asks for less. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer components {
+  /* Definition rows used by the foundation status surface and later by the
+     verification/technical layers. */
+  .record-row {
+    @apply grid gap-1 border-b border-line py-3 last:border-b-0 sm:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] sm:gap-6;
+  }
+
+  /**
+   * The product's single motion case: confirming that a recorded write outcome
+   * has appeared (Foundation Standard section 14). Declared in CSS on purpose --
+   * it is a 180ms fade with a 4px rise, and section 14 asks for lightweight CSS
+   * where that is sufficient. The reduced-motion block above disables it.
+   */
+  .reveal {
+    animation: reveal 180ms ease-out both;
+  }
+
+  @keyframes reveal {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .record-term {
+    @apply text-sm text-ink-muted;
+  }
+
+  .record-value {
+    @apply text-sm text-ink break-words;
+  }
+
+  .code-value {
+    @apply font-mono text-[0.8125rem] text-ink;
+  }
+}

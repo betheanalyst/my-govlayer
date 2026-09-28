@@ -1,0 +1,43 @@
+{
+  "name": "@govlayer/web",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GovLayer web application - a legible front end for the GovLayer constitutional governance protocol.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "vitest run --config vitest.smoke.config.ts"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "5.102.8",
+    "clsx": "2.1.1",
+    "framer-motion": "13.2.0",
+    "genlayer-js": "1.1.8",
+    "lucide-react": "1.45.0",
+    "next": "15.3.9",
+    "react": "19.3.0",
+    "react-dom": "19.3.0",
+    "tailwind-merge": "2.5.2"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4",
+    "eslint": "^9",
+    "eslint-config-next": "15.3.9",
+    "postcss": "^8.5",
+    "tailwindcss": "3.4.19",
+    "typescript": "5.9.3",
+    "vitest": "^2"
+  }
+}

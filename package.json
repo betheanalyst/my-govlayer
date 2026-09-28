@@ -1,0 +1,19 @@
+{
+  "name": "govlayer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "GovLayer - constitutional governance protocol on GenLayer. Monorepo root: contracts plus the web application.",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "npm --prefix apps/web run dev",
+    "build": "npm --prefix apps/web run build",
+    "start": "npm --prefix apps/web run start",
+    "lint": "npm --prefix apps/web run lint",
+    "typecheck": "npm --prefix apps/web run typecheck",
+    "test": "npm --prefix apps/web run test",
+    "smoke": "npm --prefix apps/web run smoke",
+    "install:web": "npm --prefix apps/web install"
+  }
+}
