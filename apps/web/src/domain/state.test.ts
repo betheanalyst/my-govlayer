@@ -235,6 +235,60 @@ describe("tallies, quorum and approval", () => {
     expect(status.met).toBe(true);
   });
 
+  it("judges quorum by the proposal's own voter count and frozen quorum", () => {
+    // Weighted tallies would show this as met, but only two distinct addresses
+    // voted, against a quorum frozen at four.
+    const proposal = makeProposal({
+      votesYes: 900n,
+      votesNo: 100n,
+      voterCount: 2,
+      quorumRequired: 4,
+    });
+
+    const status = quorumStatus(proposal, config);
+
+    expect(status.recorded).toBe(2n);
+    expect(status.required).toBe(4n);
+    expect(status.met).toBe(false);
+  });
+
+  it("falls back to the vote total and live config when the deployment omits them", () => {
+    const status = quorumStatus(
+      makeProposal({ votesYes: 2n, votesNo: 1n }),
+      config,
+    );
+
+    expect(status.recorded).toBe(3n);
+    expect(status.required).toBe(3n);
+    expect(status.met).toBe(true);
+  });
+
+  it("judges approval by the proposal's frozen threshold", () => {
+    // 66% clears the DAO's live 60%, but not the 75% frozen for this proposal.
+    const status = approvalStatus(
+      makeProposal({ votesYes: 2n, votesNo: 1n, approvalThresholdPercent: 75 }),
+      config,
+    );
+
+    expect(status.approvalPercent).toBe(66n);
+    expect(status.thresholdPercent).toBe(75n);
+    expect(status.met).toBe(false);
+  });
+
+  it("takes the weighted flag from the proposal's frozen mode", () => {
+    const frozen = approvalStatus(
+      makeProposal({ votesYes: 1n, votingWeightMode: "token_weighted" }),
+      makeConfig({ votingWeightMode: "equal" }),
+    );
+    const fallback = approvalStatus(
+      makeProposal({ votesYes: 1n }),
+      makeConfig({ votingWeightMode: "token_weighted" }),
+    );
+
+    expect(frozen.weighted).toBe(true);
+    expect(fallback.weighted).toBe(true);
+  });
+
   it("reports no percentage when nothing has been recorded", () => {
     const status = approvalStatus(makeProposal(), config);
     expect(status.approvalPercent).toBeNull();

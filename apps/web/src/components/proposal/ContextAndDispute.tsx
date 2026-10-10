@@ -47,9 +47,11 @@ export function ConstitutionReference({
           </p>
         </div>
         <p className="mt-2 text-xs text-ink-subtle">
-          A proposal records the constitution text it was evaluated against. The
-          version number of that snapshot is not recorded per proposal, so it is not
-          claimed here.
+          {proposal.constitutionVersion === undefined
+            ? "A proposal records the constitution text it was evaluated against. This deployment does not report the version number."
+            : `This proposal was reviewed under constitution version ${formatInteger(
+                BigInt(proposal.constitutionVersion),
+              )}, the text shown below.`}
         </p>
         <div className="mt-4">
           {proposal.constitutionSnapshot.trim() === "" ? (

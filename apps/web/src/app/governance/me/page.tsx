@@ -30,8 +30,9 @@ import type { Proposal } from "@/domain/types";
  *
  *  - the protocol exposes one chronological proposal sequence and no filtered
  *    queries, so this surface reviews a bounded window and says how large it was;
- *  - GovLayerCore records the tally, not the voter, so "proposals I voted on"
- *    cannot be listed. That group is not invented here.
+ *  - this surface does not list the proposals an address voted on. GovLayerCore
+ *    records each vote per address, readable through `get_vote`, but this page does
+ *    not query it -- so that group is absent rather than invented.
  */
 
 const PAGE_SIZE = 25;
@@ -201,10 +202,11 @@ export default function MyGovernancePage() {
             What this surface cannot show
           </p>
           <p className="mt-2 max-w-prose text-sm text-ink-muted">
-            GovLayerCore records the vote tally rather than the voter, so there is no
-            way to list the proposals an address voted on, or to show which way it
-            voted. That group is absent because the protocol does not expose it — not
-            because it is empty.
+            GovLayerCore records each vote on-chain against its voting address, but
+            this surface does not query a voter&rsquo;s own history. So the proposals
+            an address voted on, and which way it voted, are not listed here: that
+            group is absent because this page does not read it, not because it is
+            empty.
           </p>
         </Panel>
       </div>

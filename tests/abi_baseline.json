@@ -1,0 +1,388 @@
+{
+  "admin_methods": {
+    "add_admin": {
+      "kind": "write",
+      "params": [
+        "new_admin_address"
+      ]
+    },
+    "approve_admin_action": {
+      "kind": "write",
+      "params": [
+        "action_id"
+      ]
+    },
+    "execute_admin_action": {
+      "kind": "write",
+      "params": [
+        "action_id"
+      ]
+    },
+    "get_action": {
+      "kind": "view",
+      "params": [
+        "action_id"
+      ]
+    },
+    "get_active_admin_count": {
+      "kind": "view",
+      "params": []
+    },
+    "get_admins": {
+      "kind": "view",
+      "params": []
+    },
+    "get_current_threshold": {
+      "kind": "view",
+      "params": []
+    },
+    "get_dispute_safety_params": {
+      "kind": "view",
+      "params": []
+    },
+    "get_pending_actions": {
+      "kind": "view",
+      "params": [
+        "offset",
+        "limit"
+      ]
+    },
+    "get_rate_limit_params": {
+      "kind": "view",
+      "params": []
+    },
+    "is_admin": {
+      "kind": "view",
+      "params": [
+        "address_hex"
+      ]
+    },
+    "is_bootstrap_complete": {
+      "kind": "view",
+      "params": []
+    },
+    "is_paused": {
+      "kind": "view",
+      "params": []
+    },
+    "propose_add_admin": {
+      "kind": "write",
+      "params": [
+        "target_address"
+      ]
+    },
+    "propose_constitution_update": {
+      "kind": "write",
+      "params": [
+        "proposal_id"
+      ]
+    },
+    "propose_pause": {
+      "kind": "write",
+      "params": []
+    },
+    "propose_remove_admin": {
+      "kind": "write",
+      "params": [
+        "target_address"
+      ]
+    },
+    "propose_set_eligibility_mode": {
+      "kind": "write",
+      "params": [
+        "new_eligibility_mode"
+      ]
+    },
+    "propose_set_rate_limit_params": {
+      "kind": "write",
+      "params": [
+        "max_proposals_per_window",
+        "proposal_rate_window_secs"
+      ]
+    },
+    "propose_set_token_rules": {
+      "kind": "write",
+      "params": [
+        "voting_token",
+        "min_tokens_to_vote",
+        "min_tokens_to_propose",
+        "custom_token_interface_kind"
+      ]
+    },
+    "propose_set_voting_parameters": {
+      "kind": "write",
+      "params": [
+        "min_quorum",
+        "approval_threshold_percent",
+        "min_voting_duration",
+        "max_voting_duration"
+      ]
+    },
+    "propose_set_voting_weight_mode": {
+      "kind": "write",
+      "params": [
+        "new_voting_weight_mode"
+      ]
+    },
+    "propose_set_whitelist_enabled": {
+      "kind": "write",
+      "params": [
+        "target",
+        "enabled"
+      ]
+    },
+    "propose_unpause": {
+      "kind": "write",
+      "params": []
+    },
+    "propose_update_whitelist": {
+      "kind": "write",
+      "params": [
+        "target",
+        "add_addresses",
+        "remove_addresses"
+      ]
+    }
+  },
+  "core_methods": {
+    "apply_admin_action": {
+      "kind": "write",
+      "params": [
+        "action_id"
+      ]
+    },
+    "cancel_proposal": {
+      "kind": "write",
+      "params": [
+        "proposal_id"
+      ]
+    },
+    "finalize_decision": {
+      "kind": "write",
+      "params": [
+        "proposal_id"
+      ]
+    },
+    "get_config": {
+      "kind": "view",
+      "params": []
+    },
+    "get_constitution_history": {
+      "kind": "view",
+      "params": [
+        "offset",
+        "limit"
+      ]
+    },
+    "get_governance_history": {
+      "kind": "view",
+      "params": [
+        "offset",
+        "limit"
+      ]
+    },
+    "get_proposal": {
+      "kind": "view",
+      "params": [
+        "proposal_id"
+      ]
+    },
+    "get_proposal_revisions": {
+      "kind": "view",
+      "params": [
+        "proposal_id",
+        "offset",
+        "limit"
+      ]
+    },
+    "get_proposer_whitelist": {
+      "kind": "view",
+      "params": [
+        "offset",
+        "limit"
+      ]
+    },
+    "get_voter_whitelist": {
+      "kind": "view",
+      "params": [
+        "offset",
+        "limit"
+      ]
+    },
+    "is_admin_action_applied": {
+      "kind": "view",
+      "params": [
+        "action_id"
+      ]
+    },
+    "is_admin_contract_configured": {
+      "kind": "view",
+      "params": []
+    },
+    "is_proposer_whitelisted": {
+      "kind": "view",
+      "params": [
+        "address"
+      ]
+    },
+    "is_voter_whitelisted": {
+      "kind": "view",
+      "params": [
+        "address"
+      ]
+    },
+    "list_proposals": {
+      "kind": "view",
+      "params": [
+        "offset",
+        "limit"
+      ]
+    },
+    "raise_dispute": {
+      "kind": "write",
+      "params": [
+        "proposal_id",
+        "reason"
+      ]
+    },
+    "resubmit_proposal": {
+      "kind": "write",
+      "params": [
+        "proposal_id",
+        "new_description"
+      ]
+    },
+    "set_admin_contract_address": {
+      "kind": "write",
+      "params": [
+        "new_admin_contract_address"
+      ]
+    },
+    "submit_proposal": {
+      "kind": "write",
+      "params": [
+        "title",
+        "description",
+        "voting_duration",
+        "proposal_type",
+        "proposed_constitution"
+      ]
+    },
+    "vote": {
+      "kind": "write",
+      "params": [
+        "proposal_id",
+        "support"
+      ]
+    }
+  },
+  "views": {
+    "admin.get_action": [
+      "action_id",
+      "action_type",
+      "current_threshold",
+      "expires_at",
+      "params",
+      "proposed_at",
+      "proposer",
+      "ready_at",
+      "status",
+      "target_hex",
+      "threshold_reached_at",
+      "valid_approvals_now"
+    ],
+    "admin.get_dispute_safety_params": [
+      "dispute_cooldown_seconds",
+      "max_dispute_stages_count",
+      "max_resubmissions"
+    ],
+    "admin.get_pending_actions[]": [
+      "action_id",
+      "action_type",
+      "expires_at",
+      "proposed_at",
+      "proposer",
+      "ready_at",
+      "status",
+      "target_hex",
+      "valid_approvals_now"
+    ],
+    "admin.get_rate_limit_params": [
+      "max_proposals_per_window",
+      "proposal_rate_window_secs"
+    ],
+    "core.get_config": [
+      "admin_contract_address",
+      "approval_threshold_percent",
+      "constitution_version",
+      "custom_token_interface_kind",
+      "dispute_cooldown_seconds",
+      "eligibility_mode",
+      "governance_history_count",
+      "max_dispute_stages_count",
+      "max_proposals_per_window",
+      "max_resubmissions",
+      "max_voting_duration",
+      "min_quorum",
+      "min_tokens_to_propose",
+      "min_tokens_to_vote",
+      "min_voting_duration",
+      "proposal_count",
+      "proposal_rate_window_secs",
+      "use_whitelist_for_proposing",
+      "use_whitelist_for_voting",
+      "voting_token",
+      "voting_weight_mode"
+    ],
+    "core.get_constitution_history[]": [
+      "adopted_at",
+      "adopted_by",
+      "adopted_via_proposal_id",
+      "text",
+      "version"
+    ],
+    "core.get_governance_history[]": [
+      "actor",
+      "details",
+      "event_type",
+      "proposal_id",
+      "timestamp"
+    ],
+    "core.get_proposal": [
+      "ai_audit_decision",
+      "ai_audit_reasoning",
+      "constitution_snapshot",
+      "constitutional_conflicts",
+      "created_at",
+      "description",
+      "dispute_history",
+      "dispute_stage",
+      "failure_reason",
+      "proposal_id",
+      "proposal_type",
+      "proposed_constitution",
+      "proposer",
+      "resubmission_count",
+      "status",
+      "title",
+      "votes_no",
+      "votes_yes",
+      "voting_closes_at"
+    ],
+    "core.get_proposal.dispute_history[]": [
+      "raised_at",
+      "raised_by",
+      "reasoning",
+      "resolution",
+      "stage"
+    ],
+    "core.get_proposal_revisions[]": [
+      "prior_ai_decision",
+      "prior_ai_reasoning",
+      "prior_conflicts_json",
+      "prior_description",
+      "resubmit_number",
+      "revised_at"
+    ]
+  }
+}

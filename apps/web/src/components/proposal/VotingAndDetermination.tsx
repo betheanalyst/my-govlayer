@@ -167,8 +167,8 @@ export function VotingPanel({
 
       <p className="text-sm text-ink-muted">
         A vote is immutable once recorded: it cannot be changed, withdrawn, or
-        recast. The protocol records the tally, not individual votes, so no list of
-        who voted is shown here.
+        recast. Each vote is recorded on-chain against the voting address; this page
+        shows only the tally, not a list of voters.
       </p>
     </section>
   );

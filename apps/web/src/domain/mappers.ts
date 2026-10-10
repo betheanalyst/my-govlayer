@@ -152,6 +152,23 @@ function readOptionalNumber(
   return readSafeNumber(source, key, context);
 }
 
+/**
+ * Reads a number that may genuinely be absent.
+ *
+ * Unlike `readOptionalNumber`, an absent key stays `undefined` rather than
+ * collapsing to a fallback, so a caller can tell "the contract reported zero"
+ * apart from "this deployment does not report the field at all".
+ */
+function readPresentNumber(
+  source: Record<string, unknown>,
+  key: string,
+  context: string,
+): number | undefined {
+  const value = readField(source, key);
+  if (value === undefined || value === null) return undefined;
+  return readSafeNumber(source, key, context);
+}
+
 function readRecordArray(
   source: Record<string, unknown>,
   key: string,
@@ -264,6 +281,16 @@ export function toProposal(raw: unknown, index = 0): Proposal {
     disputeHistory: readRecordArray(record, "dispute_history", context).map(
       toDisputeRecord,
     ),
+    voterCount: readPresentNumber(record, "voter_count", context),
+    quorumRequired: readPresentNumber(record, "quorum_required", context),
+    approvalThresholdPercent: readPresentNumber(
+      record,
+      "approval_threshold_percent",
+      context,
+    ),
+    votingWeightMode:
+      readStringValue(record, "voting_weight_mode", context) || undefined,
+    constitutionVersion: readPresentNumber(record, "constitution_version", context),
   };
 }
 

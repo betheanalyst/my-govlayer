@@ -211,7 +211,10 @@ export function voteTallies(
     yes: proposal.votesYes,
     no: proposal.votesNo,
     recorded: proposal.votesYes + proposal.votesNo,
-    weighted: config.votingWeightMode === "token_weighted",
+    // Same rule as `approvalStatus`: the proposal's frozen mode wins, so the unit
+    // label beside these numbers can never contradict how they are judged.
+    weighted:
+      (proposal.votingWeightMode ?? config.votingWeightMode) === "token_weighted",
   };
 }
 
@@ -222,18 +225,32 @@ export interface QuorumStatus {
 }
 
 /**
- * Quorum as the contract applies it: the *recorded total* (a weighted sum when
- * token-weighted voting is configured) compared against `min_quorum`.
+ * Quorum as the contract applies it: the number of *distinct voters* compared
+ * with the quorum that was frozen when this proposal's voting opened.
+ *
+ * Both values come from the proposal itself where the deployment reports them.
+ * Older deployments that do not report them fall back to the proposal's vote
+ * total and the DAO's live configuration, which is the closest available
+ * approximation and is never presented as the contract's own judgement.
  */
 export function quorumStatus(
   proposal: Proposal,
   config: GovernanceConfig,
 ): QuorumStatus {
-  const recorded = proposal.votesYes + proposal.votesNo;
+  const recorded =
+    proposal.voterCount !== undefined
+      ? BigInt(proposal.voterCount)
+      : proposal.votesYes + proposal.votesNo;
+
+  const required =
+    proposal.quorumRequired !== undefined
+      ? BigInt(proposal.quorumRequired)
+      : config.minQuorum;
+
   return {
-    required: config.minQuorum,
+    required,
     recorded,
-    met: recorded >= config.minQuorum,
+    met: recorded >= required,
   };
 }
 
@@ -259,15 +276,19 @@ export function approvalStatus(
   const approvalPercent =
     total === 0n ? null : (proposal.votesYes * 100n) / total;
 
+  const thresholdPercent =
+    proposal.approvalThresholdPercent !== undefined
+      ? BigInt(proposal.approvalThresholdPercent)
+      : config.approvalThresholdPercent;
+
   return {
     yes: proposal.votesYes,
     no: proposal.votesNo,
     approvalPercent,
-    thresholdPercent: config.approvalThresholdPercent,
-    met:
-      approvalPercent !== null &&
-      approvalPercent >= config.approvalThresholdPercent,
-    weighted: config.votingWeightMode === "token_weighted",
+    thresholdPercent,
+    met: approvalPercent !== null && approvalPercent >= thresholdPercent,
+    weighted:
+      (proposal.votingWeightMode ?? config.votingWeightMode) === "token_weighted",
   };
 }
 

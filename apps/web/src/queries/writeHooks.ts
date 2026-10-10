@@ -158,7 +158,7 @@ export function useVote() {
           observe: async (core) => {
             const proposal = await core.getProposal(proposalId);
             return {
-              sentence: `Recorded tallies: ${proposal.votesYes.toString()} yes, ${proposal.votesNo.toString()} no. Votes are immutable: an address votes once, and this interface cannot show which way an address voted because the contract records the tally rather than the voter.`,
+              sentence: `Recorded tallies: ${proposal.votesYes.toString()} yes, ${proposal.votesNo.toString()} no. Votes are immutable: an address votes once, and each vote is recorded on-chain against the voting address.`,
             };
           },
         },

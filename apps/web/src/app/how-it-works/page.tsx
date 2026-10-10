@@ -126,8 +126,8 @@ export default function HowItWorksPage() {
             </p>
             <p>
               A vote is immutable once recorded. It cannot be changed, withdrawn,
-              or recast, and the protocol records the tally rather than individual
-              votes.
+              or recast, and each vote is recorded on-chain against the voting
+              address; this site shows the tally.
             </p>
           </div>
         </section>
@@ -192,8 +192,8 @@ export default function HowItWorksPage() {
             <div className="rounded-card border border-line p-5">
               <dt className="text-sm text-ink">The verification layer</dt>
               <dd className="mt-2 text-sm text-ink-muted">
-                Raw recorded values and contract addresses, so any claim on this
-                site can be reproduced independently.
+                Raw recorded values and contract addresses, so the recorded values
+                shown on this site can be checked against the chain.
               </dd>
             </div>
           </dl>
@@ -206,9 +206,9 @@ export default function HowItWorksPage() {
           />
           <ul className="mt-4 space-y-2 text-[0.9375rem] leading-relaxed text-ink-muted">
             <li>
-              Individual votes are not shown, because the protocol records the tally
-              rather than who cast what. Whether a specific address has voted is
-              answered by the protocol at the moment of voting.
+              Individual votes are not listed here. Each vote is recorded on-chain
+              against its address, but this interface shows only the tally. A second
+              vote from the same address is refused by the contract.
             </li>
             <li>
               No outcome is predicted. There is no probability of passing and no

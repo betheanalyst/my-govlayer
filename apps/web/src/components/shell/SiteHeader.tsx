@@ -65,7 +65,15 @@ export function SiteHeader() {
           </ul>
         </nav>
 
-        <ConnectWallet />
+        <div className="flex items-center gap-4">
+          <Link
+            href="/proposals/new"
+            className="rounded-card bg-accent px-4 py-2 text-sm font-medium text-ink-inverse hover:bg-accent-strong"
+          >
+            Submit proposal
+          </Link>
+          <ConnectWallet />
+        </div>
       </div>
     </header>
   );

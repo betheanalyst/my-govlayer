@@ -98,6 +98,12 @@ MIN_ADMINS_POST_BOOTSTRAP: int = 3
 # threshold table isn't.
 APPROVAL_WINDOW_SECONDS: int = 86400   # 24h -- window to gather approvals
 TIMELOCK_SECONDS:        int = 86400   # 24h -- reaction window before execute
+# An authorization is valid for this long AFTER its timelock ends
+# (ready_at). Not executed within the window -> expires; executed but not yet
+# applied by GovLayerCore within the same window -> Core refuses it. Stops
+# an old authorization being used months later. MUST stay identical to
+# ACTION_VALIDITY_WINDOW_SECONDS in GovLayerCore.py.
+ACTION_VALIDITY_WINDOW_SECONDS: int = 604800   # 7 days
 
 ACTION_ADD_ADMIN:                  str = "add_admin"
 ACTION_REMOVE_ADMIN:               str = "remove_admin"
@@ -132,14 +138,14 @@ MAX_RATE_WINDOW_SECS:     int = 2592000   # 30 days
 # Bounds for set_voting_parameters. MIN_QUORUM_FLOOR mirrors GovLayerCore's
 # own present default (3) -- governance may raise quorum, never lower it
 # below that floor. MIN/MAX_APPROVAL_THRESHOLD_PERCENT bound the pass
-# threshold to a majority-or-higher range; 0 or a value below 50 would let
+# threshold to a strict-majority-or-higher range; a value below 51 would let
 # a proposal pass without genuine majority support, and above 100 is
 # nonsensical. MIN_VOTING_DURATION_FLOOR / MAX_VOTING_DURATION_CEILING
 # mirror GovLayerCore's own present defaults (3600s / 2592000s) as hard
 # bounds, not just defaults -- governance may move within this window,
 # never outside it.
 MIN_QUORUM_FLOOR:            int = 3
-MIN_APPROVAL_THRESHOLD_PERCENT: int = 50
+MIN_APPROVAL_THRESHOLD_PERCENT: int = 51   # strict-majority floor: with >=, 50 would let an exact tie pass. MUST match GovLayerCore.py.
 MAX_APPROVAL_THRESHOLD_PERCENT: int = 100
 MIN_VOTING_DURATION_FLOOR:   int = 3600      # 1 hour
 MAX_VOTING_DURATION_CEILING: int = 2592000   # 30 days
@@ -1464,6 +1470,15 @@ class GovLayerAdmin(gl.Contract):
             f"Timelock active: not executable until timestamp {int(action.ready_at)}"
         )
 
+        # Lapsed authorization. Same graceful, persisted expiry as
+        # the approval-window case above (no revert, so the state change sticks).
+        if int(now) > int(action.ready_at) + ACTION_VALIDITY_WINDOW_SECONDS:
+            action.status = STATUS_EXPIRED
+            self.pending_actions[action_id] = action
+            self.active_pending_action_count = u256(int(self.active_pending_action_count) - 1)
+            gl.trace(f"ACTION_EXPIRED|id:{action_id}|reason:execution_window_elapsed")
+            return
+
         # Full revalidation against current state -- structural bounds,
         # target state, and current-valid-approval count against the
         # current threshold: a stale approval from an admin removed after
@@ -1644,11 +1659,12 @@ class GovLayerAdmin(gl.Contract):
     @gl.public.view
     def get_rate_limit_params(self) -> dict:
         """
-        Admin's current authoritative rate-limit parameters. This is the
-        method GovLayerCore reads from, once, at genesis configuration
-        and again whenever it pulls an executed set_rate_limit_params
-        action -- Core never reads this live on every submit_proposal()
-        call.
+        Admin's current record of the rate-limit parameters, for
+        transparency. Note: GovLayerCore does NOT read this view.
+        Core receives new values only inside an executed
+        set_rate_limit_params action's params (via apply_admin_action) and
+        keeps its own copy; the two are kept in step by that action, not by
+        a live read.
         """
         return {
             "max_proposals_per_window": int(self.max_proposals_per_window),

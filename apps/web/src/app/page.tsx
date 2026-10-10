@@ -74,10 +74,10 @@ export default async function HomePage() {
     <main className="mx-auto max-w-shell px-6 py-16">
       <section aria-labelledby="hero-heading" className="max-w-prose">
         <p className="text-xs uppercase tracking-[0.18em] text-ink-subtle">
-          Constitutional governance, enforced by design
+          Constitutional governance, reviewed in the open
         </p>
         <h1 id="hero-heading" className="mt-4 text-4xl leading-tight sm:text-5xl">
-          A proposal proves it complies before anyone votes on it.
+          A proposal is reviewed against the constitution before anyone votes on it.
         </h1>
         <p className="mt-6 text-lg text-ink-muted">
           GovLayer is a governance system in which a proposal must first
@@ -191,24 +191,43 @@ export default async function HomePage() {
         <SectionHeading
           id="genlayer-heading"
           title="Where GenLayer comes in"
-          description="Constitutional review is a judgment about language, and judgments need agreement."
+          description="Judging a proposal against a written constitution is a question of meaning, and a question of meaning needs more than one reader."
         />
         <div className="mt-6 space-y-4 text-[0.9375rem] leading-relaxed text-ink-muted">
           <p>
-            Deciding whether a proposal conflicts with a written constitution
-            cannot be reduced to arithmetic. It requires reading the proposal and
-            the rules together and reaching a conclusion.
+            A conventional smart contract can count votes but cannot read.
+            GenLayer&rsquo;s Intelligent Contracts can: the constitutional review runs
+            inside the contract itself, using language models, so no single operator
+            decides the answer.
           </p>
           <p>
-            GenLayer provides that conclusion without a trusted operator: the
-            review is evaluated independently by more than one participant, and the
-            contract records an outcome only when those evaluations agree. What
-            the protocol acts on is the decision itself, recorded on chain.
+            <strong className="font-medium text-ink">Optimistic Democracy.</strong>{" "}
+            A leader validator, chosen at random, reads the proposal and the
+            constitution and proposes a decision: accept, revise or reject. Other
+            randomly chosen validators run the same review independently and vote on
+            whether their conclusion matches. A majority accepts the result, and it
+            can then be challenged: anyone who posts a bond can send it to a larger
+            group of validators.
           </p>
           <p>
-            Review is not authority. It decides compliance; the community decides
-            direction. GenLayer makes the first answer verifiable while the second
-            remains a vote.
+            <strong className="font-medium text-ink">The Equivalence Principle.</strong>{" "}
+            Language models rarely word an answer the same way twice, so each GenLayer
+            contract defines what counts as &ldquo;the same answer&rdquo;. GovLayer&rsquo;s
+            rule is strict about the part that matters: validators must reach the
+            same decision. Their explanations may be worded differently; the decision
+            may not.
+          </p>
+          <p>
+            The agreed decision is recorded on chain together with the reasoning and
+            any conflicts the proposing validator cited, so anyone can read it.
+          </p>
+          <p>
+            Agreement is not authority, and it is not infallibility. The review is a
+            gate, not a verdict on the merits: it decides whether a proposal is
+            compatible with the constitution, never whether the community should
+            adopt it. Compatible proposals go to a vote; others can be revised or
+            disputed. Independent validators can still share a blind spot, which is
+            why the challenge window and the dispute path exist.
           </p>
         </div>
       </section>

@@ -106,6 +106,16 @@ export interface Proposal {
   readonly votingClosesAt: number;
   readonly disputeStage: number;
   readonly disputeHistory: readonly DisputeRecord[];
+  /** Distinct voters counted for quorum; frozen when voting opened; absent on older deployments. */
+  readonly voterCount?: number;
+  /** Quorum this proposal is judged against; frozen when voting opened; absent on older deployments. */
+  readonly quorumRequired?: number;
+  /** Approval threshold this proposal is judged against; frozen when voting opened; absent on older deployments. */
+  readonly approvalThresholdPercent?: number;
+  /** Voting weight mode this proposal is judged against; frozen when voting opened; absent on older deployments. */
+  readonly votingWeightMode?: string;
+  /** Constitution version this proposal was reviewed under; frozen when voting opened; absent on older deployments. */
+  readonly constitutionVersion?: number;
 }
 export interface ProposalRevision {
   readonly resubmitNumber: bigint;

@@ -84,6 +84,40 @@ describe("toProposal", () => {
       AppError,
     );
   });
+
+  it("maps the voting-rule fields frozen when voting opened", () => {
+    const proposal = toProposal(
+      baseProposal({
+        voter_count: 7,
+        quorum_required: 5,
+        approval_threshold_percent: 60,
+        voting_weight_mode: "token_weighted",
+        constitution_version: 3,
+      }),
+    );
+
+    expect(proposal.voterCount).toBe(7);
+    expect(proposal.quorumRequired).toBe(5);
+    expect(proposal.approvalThresholdPercent).toBe(60);
+    expect(proposal.votingWeightMode).toBe("token_weighted");
+    expect(proposal.constitutionVersion).toBe(3);
+  });
+
+  it("leaves the frozen fields undefined when a deployment omits them", () => {
+    const proposal = toProposal(baseProposal());
+
+    expect(proposal.voterCount).toBeUndefined();
+    expect(proposal.quorumRequired).toBeUndefined();
+    expect(proposal.approvalThresholdPercent).toBeUndefined();
+    expect(proposal.votingWeightMode).toBeUndefined();
+    expect(proposal.constitutionVersion).toBeUndefined();
+  });
+
+  it("reports an empty voting weight mode as absent rather than an empty string", () => {
+    const proposal = toProposal(baseProposal({ voting_weight_mode: "" }));
+
+    expect(proposal.votingWeightMode).toBeUndefined();
+  });
 });
 
 describe("toGovernanceConfig", () => {
