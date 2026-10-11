@@ -151,9 +151,9 @@ export function VotePanel({
                   Votes are immutable once recorded.
                 </p>
                 <p className="mt-2 max-w-prose text-sm text-ink-muted">
-                  A vote cannot be changed, withdrawn, or recast. The contract
-                  records one vote per address and keeps the tally rather than the
-                  voter, so this interface cannot show which way an address voted.
+                  A vote cannot be changed, withdrawn, or recast. Votes 
+                  are public: the contract records each vote against the voting address, so anyone can see how an address 
+                  voted. This interface shows only the tally.
                 </p>
                 <div className="mt-4 flex flex-wrap gap-3">
                   <button

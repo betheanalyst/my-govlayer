@@ -260,7 +260,7 @@ function disputeSummary(
     case "eligible_proposer":
       return `You submitted proposal #${proposalId}, so you may raise a dispute while stages remain and outside the cooldown.`;
     case "undetermined_voter":
-      return "You did not submit this proposal. A dispute from another address requires a recorded vote on it, and GovLayerCore keeps the tally rather than the voter — so this interface cannot tell whether your address voted, and will not guess. Attempting is safe: the contract accepts or refuses it.";
+      return "You did not submit this proposal. Only a proposal rejected in constitutional review can be disputed, and a rejected proposal is never opened for voting, so only its proposer can raise a dispute. The contract refuses a dispute from any other address.";
     case "cooldown":
       return `A dispute cooldown is active. The next dispute becomes available ${formatUtcTimestamp(eligibility.nextAllowedAt)} UTC (in ${formatDuration(eligibility.remainingSeconds)}).`;
     case "stages_exhausted":

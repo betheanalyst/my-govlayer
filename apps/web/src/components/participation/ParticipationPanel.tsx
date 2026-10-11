@@ -218,14 +218,9 @@ function DisputeAvailabilityPanel({
 
       {dispute.state === "undetermined_voter" ? (
         <p className="mt-4 max-w-prose text-sm text-ink-muted">
-          You did not submit this proposal, so the protocol would have to find a
-          recorded vote from your address. GovLayerCore keeps the tally rather than
-          the voter, so this interface cannot tell whether an address voted — and it
-          will not guess. If your address did vote here, you can{" "}
-          <Link href={href} className="underline">
-            attempt a dispute
-          </Link>
-          ; the contract will accept or refuse it.
+          You did not submit this proposal. 
+          Only a proposal rejected in constitutional review can be disputed, 
+          and a rejected proposal is never opened for voting, so only its proposer can raise a dispute.
         </p>
       ) : null}
 

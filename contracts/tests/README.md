@@ -44,7 +44,7 @@ for `gl.vm.run_nondet_unsafe` driven by a scripted fake LLM.
 It does **not** model real consensus or validator disagreement, gas, GenVM
 storage limits, real EVM calls, the SDK's type coercion, or real LLM behaviour.
 These unit tests prove the **logic**; they are not a substitute for running the
-contracts on a GenLayer network. See "Pre-launch verification" in `../README.md`.
+contracts on a GenLayer network.
 
 ## Quality gates
 
