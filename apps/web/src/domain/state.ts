@@ -149,7 +149,7 @@ export function disputeCooldownRemaining(
  * be read.
  *
  * - the proposer's eligibility is fully determined;
- * - any other address cannot dispute in practice: to raisea dispute, it needs a recorded
+ * - any other address cannot dispute in practice: to raise a dispute, it needs a recorded
  *   vote, and a rejected proposal is never opened for voting, so it has none.
  *   The state keeps its original name, `undetermined_voter`, and the dispute
  *   page still lets such an address attempt, which the contract then refuses.
@@ -342,7 +342,7 @@ export function summarizeProposal(
         detail:
           "Constitutional review determined that this proposal does not comply with the constitution. This is a review outcome, not a community vote.",
         nextStep:
-          "The proposer, or an address that voted on this proposal, may raise a dispute while stages remain.",
+          "Only the proposer can raise a dispute while stages remain; a rejected proposal is never opened for voting.",
         actionRequired:
           disputeStagesRemaining(proposal, config) > 0 ? "possible" : "none",
       };

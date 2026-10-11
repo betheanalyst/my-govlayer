@@ -100,8 +100,8 @@ export default function HowItWorksPage() {
           <div className="mt-4 space-y-3 text-[0.9375rem] leading-relaxed text-ink-muted">
             <p>
               A rejected proposal can be disputed — a narrow reevaluation of whether
-              the rejection was correct, judged against the same snapshot. The
-              proposer, or an address that voted on the proposal, may raise one.
+              the rejection was correct, judged against the same snapshot. A rejected 
+              proposal is never opened for voting, so only its proposer can raise one.
             </p>
             <p>
               Disputes are bounded: a limited number of stages with a mandatory

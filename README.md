@@ -344,13 +344,10 @@ network.
 ## Studionet Deployment
 
 | | |
-|---|---|
-| Chain ID | `61999` |
-| RPC | `https://studio.genlayer.com/api` |
-
-| | |
 | --- | --- |
 | Network | GenLayer Studionet |
+| Chain ID | `61999` |
+| RPC | `https://studio.genlayer.com/api` |
 | GovLayerCore | `0xB719b328D0b02d39b20DCc777Cd82c8d724661C9` |
 | GovLayerAdmin | `0xdbf8E02B02b1d87ea0599f8F03988f102bd7625A` |
 

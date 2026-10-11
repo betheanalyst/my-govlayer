@@ -144,7 +144,7 @@ export default function DisputeProposalPage() {
             <SectionHeading
               id="eligibility-heading"
               title="Who may raise it"
-              description="The proposer, or an address that voted on the proposal. The contract enforces this."
+              description="The proposer. A rejected proposal is never opened for voting, so no other address has a recorded vote. The contract enforces this."
             />
             <Panel>
               {eligibility === null ? (
