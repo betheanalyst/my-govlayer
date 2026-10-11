@@ -14,10 +14,10 @@ import type {
  *
  *   1. `rejected` (a constitutional-review outcome) and `failed` (a post-vote
  *      governance outcome) never collapse into the same state.
- *   2. Where the contracts expose no data, the result says so instead of
- *      guessing. In particular GovLayerCore has no per-voter view, so voter
- *      eligibility for a dispute cannot be determined by reading -- that case is
- *      represented explicitly (`undetermined_voter`), not assumed.
+ *   2. Where this interface does not read the protocol, the result says so
+ *      instead of guessing. For example, it does not call GovLayerCore's
+ *      `get_vote`, so whether an address has already voted is left to the
+ *      contract to enforce when a vote is cast.
  */
 
 /** Where a proposal stands, expressed in the protocol's own terms. */
@@ -91,9 +91,8 @@ export function canFinalize(proposal: Proposal, now: number): boolean {
  * The protocol-state half of vote eligibility.
  *
  * Whether *this* address may vote additionally depends on eligibility
- * configuration and on whether it has already voted. The contracts expose no
- * per-address vote record, so "already voted" cannot be read: it is discovered
- * by the contract rejecting a second attempt (votes are immutable).
+ * configuration and on whether it has already voted. This interface does not read `get_vote`, so "already voted" is discovered by
+ * the contract rejecting a second attempt (votes are immutable).
  */
 export function canVote(proposal: Proposal, now: number): boolean {
   return isVotingOpen(proposal, now);
@@ -150,9 +149,10 @@ export function disputeCooldownRemaining(
  * be read.
  *
  * - the proposer's eligibility is fully determined;
- * - a non-proposer can only dispute if it recorded a vote on this proposal, and
- *   GovLayerCore exposes no per-voter record -- so that case is
- *   `undetermined_voter`, never assumed eligible or ineligible.
+ * - any other address cannot dispute in practice: to raisea dispute, it needs a recorded
+ *   vote, and a rejected proposal is never opened for voting, so it has none.
+ *   The state keeps its original name, `undetermined_voter`, and the dispute
+ *   page still lets such an address attempt, which the contract then refuses.
  */
 export type DisputeEligibility =
   | { readonly state: "not_rejected" }

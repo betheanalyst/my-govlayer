@@ -137,7 +137,8 @@ function nowSeconds(): number {
  *
  * A second attempt from the same address reverts with the contract's own
  * message, which the error registry reports as an existing recorded vote --
- * there is no per-voter view to consult, so the revert is the protocol's answer.
+ * this interface does not read `get_vote` before casting, so the revert is the
+ * protocol's answer.
  */
 export function useVote() {
   const wallet = useWallet();

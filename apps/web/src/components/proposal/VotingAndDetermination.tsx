@@ -32,8 +32,9 @@ import { formatUtcTimestamp } from "@/lib/time";
  * progress numbers are shown, and the immutability of votes is stated. Casting a
  * vote arrives with wallet participation in a later phase.
  *
- * Honest scope: GovLayerCore records tallies but exposes no per-voter data, so no
- * participant list is shown and none is implied.
+ * Honest scope: GovLayerCore records each vote against its voting address and
+ * exposes it through `get_vote`, but this surface reads only the proposal's
+ * tallies, so no participant list is shown and none is implied.
  */
 
 function ProgressBar({ value, max }: { value: bigint; max: bigint }) {
